@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Trivia Game</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="welcome-screen" class="screen">
+    <h1 class="welcome-text">Welcome Players!</h1>
+    <div class="player-cards">
+      <div class="player-card player1">
+        <div class="circle">P1</div>
+      </div>
+      <div class="player-card player2">
+        <div class="circle">P2</div>
+      </div>
+    </div>
+    <button id="startBtn" class="select-btn">Select Trivia Subject</button>
+  </div>
+
+  <div id="board-screen" class="screen hidden">
+    <h1 class="trivia-text">Choose your Trivia</h1>
+    <div id="board" class="board"></div>
+    <button id="randomBtn" class="cell">Suprise Me!</button>
+  </div>
+
+  <div id="question-screen" class="screen hidden">
+    <h1 id="picked-info"></h1>
+    <div class="player-icons">
+      <div id="icon-p1" class="player-icon">P1</div>
+      <div id="icon-p2" class="player-icon">P2</div>
+    </div>
+    <p id="step-up" class="flashing">Step up to your tiles</p>
+    <div id="question-display"></div>
+  </div>  
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="client.js"></script>
+</body>
+</html>
