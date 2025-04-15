@@ -3,6 +3,7 @@ const socket = io();
 let currentPlayer = null;
 let playerReady = { P1: false, P2: false };
 
+//Question values
 const categories = ['New Media Design', 'Game Show History', 'Rochester NY', 'RIT'];
 const values = [400, 800, 1200];
 
@@ -61,7 +62,7 @@ function updateStartButton() {
   }
 }
 
-// Transition to Jeopardy board
+// Transition to question board
 startBtn.addEventListener('click', () => {
   document.getElementById('welcome-screen').classList.add('hidden');
   document.getElementById('board-screen').classList.remove('hidden');
@@ -69,11 +70,12 @@ startBtn.addEventListener('click', () => {
   showPlayerIcons();
 });
 
-// Build the Jeopardy board
+// Build the question board
 function buildBoard() {
   const board = document.getElementById('board');
   board.innerHTML = '';
 
+  //Build the category headers
   categories.forEach(cat => {
     const header = document.createElement('div');
     header.className = `cell ${cat.toLowerCase().replace(/\s+/g, '')} category-header`;
@@ -81,6 +83,7 @@ function buildBoard() {
     board.appendChild(header);
   });
 
+  //Build the value buttons
   values.forEach(value => {
     categories.forEach(cat => {
       const cell = document.createElement('button');
@@ -129,6 +132,7 @@ function buildBoard() {
     });
   });
 
+  //Random button logic
   document.getElementById('randomBtn').addEventListener('click', () => {
     if (!currentPlayer) return alert("Select a player first!");
   
@@ -145,6 +149,7 @@ function buildBoard() {
 function showPlayerIcons() {
   const boardScreen = document.getElementById('board-screen');
 
+  //Set up icons
   const iconStyle = (color) => `
     position: absolute;
     top: 20px;
@@ -178,7 +183,7 @@ function showPlayerIcons() {
 }
 
 socket.on('questionSent', ({ question, category, value }) => {
-  // Hide Jeopardy board
+  // Hide question board
   document.getElementById('board-screen').classList.add('hidden');
   
   // Show question screen
