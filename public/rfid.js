@@ -1,11 +1,8 @@
 class RfidServer {
     /**
-     * @param {!HTMLElement} messageBox The div to display messages.
+     * Creates a new RfidServer instance.
      */
-    constructor(messageBox) {
-        /** @private @const {!HTMLElement} **/
-        this.messageBox_ = messageBox;
-
+    constructor() {
         /**
          * WebSocket or SSE connection.
          * @private @type {WebSocket|EventSource}
@@ -16,6 +13,8 @@ class RfidServer {
          * @private @type {?function}
          */
         this.connectionType_ = null;
+        /** @private @const {string} */
+        this.url_ = new URL("http://nm-rfid-3.new-media-metagame.com:8001/");
     }
 
     /**
@@ -32,7 +31,7 @@ class RfidServer {
      */
     disconnect() {
         if (this.connection_) {
-            this.addMessage_('Closing.', 'status');
+            console.log('Closing.', 'status');
             this.connection_.close();
             this.connection_ = null;
         }
@@ -44,10 +43,9 @@ class RfidServer {
     connectWebSocket() {
         this.disconnect();
         this.clearMessages();
-        let url = new URL(window.location);
-        let protocol = (url.protocol == 'https:') ? 'wss:' : 'ws:';
-        url = `${protocol}//${url.host}/ws`;
-        this.addMessage_(`Connecting to ${url}...`, 'status');
+        let protocol = (this.url_.protocol == 'https:') ? 'wss:' : 'ws:';
+        let url = `${protocol}//${url.host}/ws`;
+        console.log(`Connecting to ${url}...`, 'status');
         this.connection_ = new WebSocket(url);
         this.connectionType_ = WebSocket;
         this.addEventListeners_();
@@ -59,9 +57,8 @@ class RfidServer {
     connectSse() {
         this.disconnect();
         this.clearMessages();
-        let url = new URL(window.location);
-        url = `${url.origin}/sse`;
-        this.addMessage_(`Connecting to ${url}...`, 'status');
+        let url = `${this.url_.origin}/sse`;
+        console.log(`Connecting to ${url}...`, 'status');
         this.connection_ = new EventSource(url);
         this.connectionType_ = EventSource;
         this.addEventListeners_();
@@ -74,23 +71,23 @@ class RfidServer {
     addEventListeners_() {
         this.connection_.addEventListener('open', (event) => {
             console.log(event);
-            this.addMessage_('Connected.', 'status');
+            console.log('Connected.', 'status');
         });
 
         this.connection_.addEventListener('message', (event) => {
             console.log(event);
-            this.addMessage_(`Tap: ${event.data}`);
+            console.log(`Tap: ${event.data}`);
         });
 
         this.connection_.addEventListener('error', (event) => {
             console.error(event);
-            this.addMessage_('Error, disconnected.', 'status error');
+            console.log('Error, disconnected.', 'status error');
         });
 
         if (this.connectionType_ == WebSocket) {
             this.connection_.addEventListener('close', (event) => {
                 console.log(event);
-                this.addMessage_('Closed.', 'status');
+                console.log('Closed.', 'status');
             });
         }
     }
@@ -107,15 +104,15 @@ class RfidServer {
                     data = JSON.stringify(JSON.parse(data), null, 2);
                 } catch (e) { }
                 if (response.ok) {
-                    this.addMessage_('Received response:', 'comment');
-                    this.addMessage_(data, 'response');
+                    console.log('Received response:', 'comment');
+                    console.log(data, 'response');
                 } else {
-                    this.addMessage_(`Received error (${response.status}):`,
+                    console.log(`Received error (${response.status}):`,
                         'comment error');
-                    this.addMessage_(data, 'response error');
+                    console.log(data, 'response error');
                 }
             } else if (!response.ok) {
-                this.addMessage_(`Received error (${response.status}): ` +
+                console.log(`Received error (${response.status}): ` +
                     `${response.statusText}`,
                     'comment error');
             }
@@ -132,10 +129,9 @@ class RfidServer {
     setLights(pattern, duration = 0, params = {}) {
         let data = Object.assign({ duration, pattern }, params);
         let body = new URLSearchParams(data);  // JSON.stringify(data);
-        let url = new URL(window.location);
-        url = `${url.origin}/lights`;
-        this.addMessage_(`Sending command to ${url}:`, 'comment');
-        this.addMessage_(JSON.stringify(data, null, 2), 'command');
+        let url = `${this.url_.origin}/lights`;
+        console.log(`Sending command to ${url}:`, 'comment');
+        console.log(JSON.stringify(data, null, 2), 'command');
         fetch(url, {
             method: 'POST',
             body,
@@ -149,27 +145,12 @@ class RfidServer {
     tap(rfidId) {
         let data = { rfidId };
         let body = new URLSearchParams(data);  // JSON.stringify(data);
-        let url = new URL(window.location);
-        url = `${url.origin}/tap`;
-        this.addMessage_(`Sending command to ${url}:`, 'comment');
-        this.addMessage_(JSON.stringify(data, null, 2), 'command');
+        let url = `${this.url_.origin}/tap`;
+        console.log(`Sending command to ${url}:`, 'comment');
+        console.log(JSON.stringify(data, null, 2), 'command');
         fetch(url, {
             method: 'POST',
             body,
         }).then((response) => this.handleResponse_(response));
-    }
-
-    /**
-     * Adds a message to the message box.
-     * @param {string} message The text of the message.
-     * @param {string=} className Name of a class to attach to the message.
-     * @private
-     */
-    addMessage_(message, className = '') {
-        let elem = document.createElement('div');
-        elem.className = className;
-        elem.textContent = message;
-        this.messageBox_.appendChild(elem);
-        this.messageBox_.scrollTop = this.messageBox_.scrollHeight;
     }
 }
