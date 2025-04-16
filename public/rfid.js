@@ -15,6 +15,10 @@ class RfidServer {
         this.connectionType_ = null;
         /** @private @const {string} */
         this.url_ = new URL("http://nm-rfid-3.new-media-metagame.com:8001/");
+        /** 
+         * The event that is emmited when tap is detected
+         * @type {CustomEvent} */
+        this.tapEvent_ = new CustomEvent('strongTap', { detail: {} });
     }
 
     /**
@@ -42,7 +46,7 @@ class RfidServer {
      */
     connectWebSocket() {
         this.disconnect();
-        this.clearMessages();
+        
         let protocol = (this.url_.protocol == 'https:') ? 'wss:' : 'ws:';
         let url = `${protocol}//${url.host}/ws`;
         console.log(`Connecting to ${url}...`, 'status');
@@ -56,7 +60,7 @@ class RfidServer {
      */
     connectSse() {
         this.disconnect();
-        this.clearMessages();
+        
         let url = `${this.url_.origin}/sse`;
         console.log(`Connecting to ${url}...`, 'status');
         this.connection_ = new EventSource(url);
@@ -77,6 +81,7 @@ class RfidServer {
         this.connection_.addEventListener('message', (event) => {
             console.log(event);
             console.log(`Tap: ${event.data}`);
+            window.dispatchEvent(this.tapEvent_);
         });
 
         this.connection_.addEventListener('error', (event) => {

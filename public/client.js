@@ -1,5 +1,11 @@
 const socket = io();
-
+let rfid = new RfidServer();
+window.onload = () => {
+  rfid.connectSse();
+};
+window.addEventListener('strongTap', (event) => {
+  console.log("armbandtap")
+});
 let currentPlayer = null;
 let playerReady = { P1: false, P2: false };
 
