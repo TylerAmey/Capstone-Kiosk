@@ -14,30 +14,22 @@ const p2Card = document.querySelector('.player2');
 const p1Circle = p1Card.querySelector('.circle');
 const p2Circle = p2Card.querySelector('.circle');
 
-// Player click logic (toggle on/off)
-p1Circle.addEventListener('click', () => {
-  playerReady.P1 = !playerReady.P1;
-  p1Card.classList.toggle('ready', playerReady.P1);
-  if (playerReady.P1) {
-    currentPlayer = 'P1';
-  } else if (!playerReady.P2) {
+function togglePlayerReady(player, card) {
+  playerReady[player] = !playerReady[player];
+  card.classList.toggle('ready', playerReady[player]);
+  if (playerReady[player]) {
+    currentPlayer = player;
+  } else if (!playerReady.P1 && !playerReady.P2) {
     currentPlayer = null;
   }
   checkReady();
   updateStartButton();
-});
+}
 
-p2Circle.addEventListener('click', () => {
-  playerReady.P2 = !playerReady.P2;
-  p2Card.classList.toggle('ready', playerReady.P2);
-  if (playerReady.P2) {
-    currentPlayer = 'P2';
-  } else if (!playerReady.P1) {
-    currentPlayer = null;
-  }
-  checkReady();
-  updateStartButton();
-});
+// Player click logic (toggle on/off)
+p1Circle.addEventListener('click', () => {togglePlayerReady('P1', p1Card)});
+
+p2Circle.addEventListener('click', () => {togglePlayerReady('P2', p2Card)});
 
 // Allow start with at least one player ready
 function checkReady() {
