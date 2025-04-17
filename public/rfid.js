@@ -148,6 +148,14 @@ class RfidServer {
     }
 
     /**
+     * Sets the RFID lights to certain presets.
+     * @param {string} preset The preset name.
+     * @param {number=} duration The length to show the pattern or 0 for
+     *     persistent idle. In milliseconds.
+     * 
+     */
+
+    /**
      * Tests and RFID tap.
      * @param {string} rfidId The ID of the band to tap.
      */

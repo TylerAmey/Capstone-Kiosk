@@ -132,7 +132,9 @@ function buildBoard() {
           category: cat,
           value,
           player1: playerReady.P1,
-          player2: playerReady.P2
+          player2: playerReady.P2,
+          player1id: playerReady.P1id,
+          player2id: playerReady.P2id
         });  
 
       });      
