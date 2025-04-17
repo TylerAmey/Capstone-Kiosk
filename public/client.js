@@ -4,7 +4,13 @@ window.onload = () => {
   rfid.connectSse();
 };
 window.addEventListener('strongTap', (event) => {
-  console.log("armbandtap")
+  if(!playerReady.P1) {
+    togglePlayerReady('P1', p1Card);
+  }else if(!playerReady.P2) {
+    togglePlayerReady('P2', p2Card);
+  }else{
+    console.error("More than two players are not allowed!");
+  }
 });
 let currentPlayer = null;
 let playerReady = { P1: false, P2: false };

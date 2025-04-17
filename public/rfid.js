@@ -130,8 +130,9 @@ class RfidServer {
      * @param {number=} duration The length to show the pattern or 0 for
      *     persistent idle. In milliseconds.
      * @param {Object=} params Pattern-specific parameters.
+     * * @private
      */
-    setLights(pattern, duration = 0, params = {}) {
+    setLights_(pattern, duration = 0, params = {}) {
         let data = Object.assign({ duration, pattern }, params);
         let body = new URLSearchParams(data);  // JSON.stringify(data);
         let url = `${this.url_.origin}/lights`;
