@@ -15,10 +15,11 @@ class RfidServer {
         this.connectionType_ = null;
         /** @private @const {string} */
         this.url_ = new URL("http://nm-rfid-3.new-media-metagame.com:8001/");
-        /** 
-         * The event that is emmited when tap is detected
-         * @type {CustomEvent} */
-        this.tapEvent_ = new CustomEvent('strongTap', { detail: {} });
+
+        /** @private {string} 
+         * The ID of the tap that was detected.
+        */
+        this.tapID_ = null;
     }
 
     /**
@@ -81,7 +82,9 @@ class RfidServer {
         this.connection_.addEventListener('message', (event) => {
             console.log(event);
             console.log(`Tap: ${event.data}`);
-            window.dispatchEvent(this.tapEvent_);
+            this.tapID_ = event.data;           
+            let tapEvent_ = new CustomEvent('strongTap', { detail: {tapID: this.tapID_} });
+            window.dispatchEvent(tapEvent_);
         });
 
         this.connection_.addEventListener('error', (event) => {

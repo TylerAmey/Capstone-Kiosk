@@ -1,19 +1,24 @@
 const socket = io();
+//set up SSE connection to RFID server
 let rfid = new RfidServer();
 window.onload = () => {
   rfid.connectSse();
 };
+//listen for RFID events
 window.addEventListener('strongTap', (event) => {
+  console.log(event);
   if(!playerReady.P1) {
     togglePlayerReady('P1', p1Card);
+    playerReady.P1id = event.detail.tapID
   }else if(!playerReady.P2) {
     togglePlayerReady('P2', p2Card);
+    playerReady.P2id = event.detail.tapID
   }else{
     console.error("More than two players are not allowed!");
   }
 });
 let currentPlayer = null;
-let playerReady = { P1: false, P2: false };
+let playerReady = { P1: false, P1id:null, P2: false, P2id:null };
 
 //Question values
 const categories = ['New Media Design', 'Game Show History', 'Rochester NY', 'RIT'];
