@@ -218,3 +218,23 @@ socket.on('questionSent', ({ question, category, value }) => {
   display.textContent = "";
 });
 
+socket.on('clientReset', () => {
+  // Hide all screens
+  document.getElementById('question-screen').classList.add('hidden');
+  document.getElementById('board-screen').classList.add('hidden');
+
+  // Show welcome screen
+  document.getElementById('welcome-screen').classList.remove('hidden');
+
+  // Reset player cards and ready state
+  playerReady = { P1: false, P2: false };
+  currentPlayer = null;
+
+  document.querySelector('.player1').classList.remove('ready');
+  document.querySelector('.player2').classList.remove('ready');
+
+  // Reset start button
+  checkReady();
+  updateStartButton();
+});
+

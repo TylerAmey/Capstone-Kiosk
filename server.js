@@ -30,6 +30,10 @@ io.on('connection', (socket) => {
     const randQuestion = randList[Math.floor(Math.random() * randList.length)];
     derivedSocket.emit('questionSent', { question: randQuestion, category: randCat, value: randValue, player1, player2, player1id, player2id});
   });
+  //reset client on reset
+  socket.on('resetKiosk', (bool) =>{
+    io.emit('resetClient', true);
+  });
 });
 
 const PORT = process.env.PORT || 3000;
