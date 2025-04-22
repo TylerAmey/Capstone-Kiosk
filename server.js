@@ -31,7 +31,8 @@ io.on('connection', (socket) => {
     derivedSocket.emit('questionSent', { question: randQuestion, category: randCat, value: randValue, player1, player2, player1id, player2id});
   });
   //reset client on reset
-  socket.on('resetKiosk', (bool) =>{
+  derivedSocket.on('resetKiosk', (bool) =>{
+    console.log('resetting client');
     io.emit('resetClient', true);
   });
 });

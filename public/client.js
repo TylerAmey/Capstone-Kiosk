@@ -218,7 +218,8 @@ socket.on('questionSent', ({ question, category, value }) => {
   display.textContent = "";
 });
 
-socket.on('clientReset', () => {
+socket.on('resetClient', () => {
+  console.log('resetting client');
   // Hide all screens
   document.getElementById('question-screen').classList.add('hidden');
   document.getElementById('board-screen').classList.add('hidden');
