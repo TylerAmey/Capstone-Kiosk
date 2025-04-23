@@ -3,16 +3,27 @@ const socket = io();
 let rfid = new RfidServer();
 window.onload = () => {
   rfid.connectSse();
+  rfid.setLights("ATTRACT");
 };
 //listen for RFID events
 window.addEventListener('strongTap', (event) => {
   console.log(event);
   if(!playerReady.P1) {
-    togglePlayerReady('P1', p1Card);
     playerReady.P1id = event.detail.tapID
+    if(playerReady.P1id !=  null){
+      rfid.setLights("SUCCESS");
+      togglePlayerReady('P1', p1Card);
+    }else{
+      rfid.setLights("ERROR");
+    }
   }else if(!playerReady.P2) {
-    togglePlayerReady('P2', p2Card);
     playerReady.P2id = event.detail.tapID
+    if(playerReady.P2id !=null){
+      rfid.setLights("SUCCESS");
+      togglePlayerReady('P2', p2Card);
+    }else{
+      rfid.setLights("ERROR");
+    }
   }else{
     console.error("More than two players are not allowed!");
   }

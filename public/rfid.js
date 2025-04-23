@@ -139,8 +139,8 @@ class RfidServer {
         let data = Object.assign({ duration, pattern }, params);
         let body = new URLSearchParams(data);  // JSON.stringify(data);
         let url = `${this.url_.origin}/lights`;
-        console.log(`Sending command to ${url}:`, 'comment');
-        console.log(JSON.stringify(data, null, 2), 'command');
+        //console.log(`Sending command to ${url}:`, 'comment');
+        //console.log(JSON.stringify(data, null, 2), 'command');
         fetch(url, {
             method: 'POST',
             body,
@@ -150,10 +150,34 @@ class RfidServer {
     /**
      * Sets the RFID lights to certain presets.
      * @param {string} preset The preset name.
-     * @param {number=} duration The length to show the pattern or 0 for
-     *     persistent idle. In milliseconds.
-     * 
      */
+    setLights(preset){
+        switch(preset){
+            case "ATTRACT":
+                this.setLights_("pulse", 0, {
+                    "foreground":"#FF00EE",
+                    "background":"#000000",
+                    "period":2
+                });
+            break;
+            case "ERROR":
+                this.setLights_("blink", 1.5, {
+                    "foreground":"#FF0000",
+                    "background":"#000000",
+                    "foregroundPeriod":0.5,
+                    "backgroundPeriod":0.5
+                });
+            break;
+            case "SUCCESS":
+                this.setLights_("blink", 1.5, {
+                    "foreground":"#00FF00",
+                    "background":"#000000",
+                    "foregroundPeriod":0.5,
+                    "backgroundPeriod":0.5
+                });
+            break;
+        }
+    }
 
     /**
      * Tests and RFID tap.
