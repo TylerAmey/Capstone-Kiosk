@@ -154,10 +154,13 @@ class RfidServer {
     setLights(preset){
         switch(preset){
             case "ATTRACT":
-                this.setLights_("pulse", 0, {
+                this.setLights_("doublecomet", 0, {
                     "foreground":"#FF00EE",
-                    "background":"#000000",
-                    "period":2
+                    "foreground": "#dc0909",
+                    "background": "#cb11e4",
+                    "foreground2": "#0af531",
+                    "background2": "#9f0ced",
+                    "period": 1.5
                 });
             break;
             case "ERROR":
